@@ -8,7 +8,8 @@ namespace CustomersApi.BL.MapperProfiles
     {
         public AddressProfile()
         {
-            CreateMap<Address, AddressModel>();
+            CreateMap<Address, AddressModel>()
+                .ForMember(m => m.AddressType, opt => opt.MapFrom(src=>src.AddressTypeMapping.AddressName));
 
             CreateMap<AddressModel, Address>()
                 .ForMember(m => m.CustomerId, opt => opt.Ignore())

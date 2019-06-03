@@ -26,6 +26,8 @@ namespace CustomersApi.BL.Services
                 .GetAll()
                 .Include(x => x.Addresses).ToList();
 
+            var type = customers.FirstOrDefault().Addresses.FirstOrDefault().AddressTypeMapping;
+
             return _mapper.Map<List<Customer>, List<CustomerModel>>(customers);
         }
 

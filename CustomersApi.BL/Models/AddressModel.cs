@@ -8,7 +8,7 @@ namespace CustomersApi.Models
 {
     public class AddressModel
     {
-        public char AddressType { get; set; }
+        public string AddressType { get; set; }
         public string Name { get; set; }
         public string Street { get; set; }
         public string ZIP { get; set; }

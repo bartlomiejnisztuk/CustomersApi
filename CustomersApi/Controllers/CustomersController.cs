@@ -5,7 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CustomersApi.Controllers
 {
-    //TODO add mapper, where ? to BL? where put dtos ? to BL ?, where run mapping ? maybe each layer should have its own layer ? (controller- view models, bl - dtos, DAL- > entities)
+    //TODO from action return ActionResult<T> and return proper status codes if there is a problem
+    //https://dejanstojanovic.net/aspnet/2018/december/choosing-the-proper-return-type-for-webapi-controller-actions/
+    //todo add validation for post operations 
+    //todo implement address controller and service
+    //todo move address type mapping to business logic ? maybe
     [Route("api/[controller]")]
     [ApiController]
     public class CustomersController : ControllerBase
@@ -21,6 +25,7 @@ namespace CustomersApi.Controllers
         public JsonResult GetAll()
         {
             var result = _customerService.GetAllCustomers().ToList();
+           
 
             return new JsonResult(result);
         }
