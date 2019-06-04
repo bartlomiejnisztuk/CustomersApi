@@ -41,7 +41,6 @@ namespace CustomersApi.DAL.Migrations
                     CustomerId = table.Column<string>(nullable: false),
                     AddressType = table.Column<string>(nullable: false),
                     CustomerName = table.Column<string>(nullable: true),
-                    AddressTypeMappingAddressType = table.Column<string>(nullable: true),
                     Name = table.Column<string>(maxLength: 100, nullable: true),
                     Street = table.Column<string>(maxLength: 100, nullable: true),
                     ZIP = table.Column<string>(maxLength: 20, nullable: true),
@@ -58,28 +57,32 @@ namespace CustomersApi.DAL.Migrations
                         principalColumn: "AddressType",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Addresses_AddressTypeMapping_AddressTypeMappingAddressType",
-                        column: x => x.AddressTypeMappingAddressType,
-                        principalTable: "AddressTypeMapping",
-                        principalColumn: "AddressType",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
                         name: "FK_Addresses_Customers_CustomerId_CustomerName",
                         columns: x => new { x.CustomerId, x.CustomerName },
                         principalTable: "Customers",
                         principalColumns: new[] { "CustomerId", "Name" },
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "AddressTypeMapping",
+                columns: new[] { "AddressType", "AddressName" },
+                values: new object[] { "D", "delivery address" });
+
+            migrationBuilder.InsertData(
+                table: "AddressTypeMapping",
+                columns: new[] { "AddressType", "AddressName" },
+                values: new object[] { "I", "invoice address" });
+
+            migrationBuilder.InsertData(
+                table: "AddressTypeMapping",
+                columns: new[] { "AddressType", "AddressName" },
+                values: new object[] { "S", "service address" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Addresses_AddressType",
                 table: "Addresses",
                 column: "AddressType");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Addresses_AddressTypeMappingAddressType",
-                table: "Addresses",
-                column: "AddressTypeMappingAddressType");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Addresses_CustomerId_CustomerName",

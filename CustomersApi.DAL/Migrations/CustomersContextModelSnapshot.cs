@@ -25,9 +25,6 @@ namespace CustomersApi.DAL.Migrations
                     b.Property<string>("AddressType")
                         .HasConversion(new ValueConverter<string, string>(v => default(string), v => default(string), new ConverterMappingHints(size: 1)));
 
-                    b.Property<string>("AddressTypeMappingAddressType")
-                        .HasConversion(new ValueConverter<string, string>(v => default(string), v => default(string), new ConverterMappingHints(size: 1)));
-
                     b.Property<string>("City")
                         .HasMaxLength(100);
 
@@ -49,8 +46,6 @@ namespace CustomersApi.DAL.Migrations
 
                     b.HasIndex("AddressType");
 
-                    b.HasIndex("AddressTypeMappingAddressType");
-
                     b.HasIndex("CustomerId", "CustomerName");
 
                     b.ToTable("Addresses");
@@ -66,7 +61,7 @@ namespace CustomersApi.DAL.Migrations
 
                     b.HasKey("AddressType");
 
-                    b.ToTable("AddressTypeMapping");
+                    b.ToTable("AddressTypeMappings");
 
                     b.HasData(
                         new
@@ -113,18 +108,15 @@ namespace CustomersApi.DAL.Migrations
 
             modelBuilder.Entity("CustomersApi.DAL.Entities.Address", b =>
                 {
-                    b.HasOne("CustomersApi.DAL.Entities.AddressTypeMapping")
+                    b.HasOne("CustomersApi.DAL.Entities.AddressTypeMapping", "AddressTypeMapping")
                         .WithMany()
                         .HasForeignKey("AddressType")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("CustomersApi.DAL.Entities.AddressTypeMapping", "AddressTypeMapping")
-                        .WithMany()
-                        .HasForeignKey("AddressTypeMappingAddressType");
-
                     b.HasOne("CustomersApi.DAL.Entities.Customer", "Customer")
                         .WithMany("Addresses")
-                        .HasForeignKey("CustomerId", "CustomerName");
+                        .HasForeignKey("CustomerId", "CustomerName")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

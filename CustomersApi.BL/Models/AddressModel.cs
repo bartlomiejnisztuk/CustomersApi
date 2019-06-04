@@ -8,6 +8,8 @@ namespace CustomersApi.Models
 {
     public class AddressModel
     {
+        public string CustomerId { get; set; }
+        public string CustomerName { get; set; }
         public string AddressType { get; set; }
         public string Name { get; set; }
         public string Street { get; set; }

@@ -17,6 +17,7 @@ namespace CustomersApi.DAL
 
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Address> Addresses { get; set; }
+        public DbSet<AddressTypeMapping> AddressTypeMappings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -36,6 +37,7 @@ namespace CustomersApi.DAL
                 .Entity<Customer>()
                 .HasMany(e => e.Addresses)
                 .WithOne(e => e.Customer)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasForeignKey(e => new
                 {
                     e.CustomerId,
@@ -54,6 +56,8 @@ namespace CustomersApi.DAL
                 {
                     e.AddressType
                 });
+
+            
 
             modelBuilder.Entity<AddressTypeMapping>()
                 .HasData(new List<AddressTypeMapping>

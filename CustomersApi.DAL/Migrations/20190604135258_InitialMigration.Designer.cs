@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CustomersApi.DAL.Migrations
 {
     [DbContext(typeof(CustomersContext))]
-    [Migration("20190601203356_InitialMigration")]
+    [Migration("20190604135258_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,9 +25,6 @@ namespace CustomersApi.DAL.Migrations
                     b.Property<string>("CustomerId");
 
                     b.Property<string>("AddressType")
-                        .HasConversion(new ValueConverter<string, string>(v => default(string), v => default(string), new ConverterMappingHints(size: 1)));
-
-                    b.Property<string>("AddressTypeMappingAddressType")
                         .HasConversion(new ValueConverter<string, string>(v => default(string), v => default(string), new ConverterMappingHints(size: 1)));
 
                     b.Property<string>("City")
@@ -51,8 +48,6 @@ namespace CustomersApi.DAL.Migrations
 
                     b.HasIndex("AddressType");
 
-                    b.HasIndex("AddressTypeMappingAddressType");
-
                     b.HasIndex("CustomerId", "CustomerName");
 
                     b.ToTable("Addresses");
@@ -69,6 +64,23 @@ namespace CustomersApi.DAL.Migrations
                     b.HasKey("AddressType");
 
                     b.ToTable("AddressTypeMapping");
+
+                    b.HasData(
+                        new
+                        {
+                            AddressType = "D",
+                            AddressName = "delivery address"
+                        },
+                        new
+                        {
+                            AddressType = "I",
+                            AddressName = "invoice address"
+                        },
+                        new
+                        {
+                            AddressType = "S",
+                            AddressName = "service address"
+                        });
                 });
 
             modelBuilder.Entity("CustomersApi.DAL.Entities.Customer", b =>
@@ -98,18 +110,15 @@ namespace CustomersApi.DAL.Migrations
 
             modelBuilder.Entity("CustomersApi.DAL.Entities.Address", b =>
                 {
-                    b.HasOne("CustomersApi.DAL.Entities.AddressTypeMapping")
+                    b.HasOne("CustomersApi.DAL.Entities.AddressTypeMapping", "AddressTypeMapping")
                         .WithMany()
                         .HasForeignKey("AddressType")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("CustomersApi.DAL.Entities.AddressTypeMapping", "AddressTypeMapping")
-                        .WithMany()
-                        .HasForeignKey("AddressTypeMappingAddressType");
-
                     b.HasOne("CustomersApi.DAL.Entities.Customer", "Customer")
                         .WithMany("Addresses")
-                        .HasForeignKey("CustomerId", "CustomerName");
+                        .HasForeignKey("CustomerId", "CustomerName")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

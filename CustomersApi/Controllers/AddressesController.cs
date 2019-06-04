@@ -6,21 +6,21 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CustomersApi.Controllers
 {
-    //https://dejanstojanovic.net/aspnet/2018/december/choosing-the-proper-return-type-for-webapi-controller-actions/
     [Route("api/[controller]")]
     [ApiController]
-    public class CustomersController : ControllerBase
+    public class AddressesController : ControllerBase
     {
-        private readonly ICustomerService _customerService;
-        public CustomersController(ICustomerService customerService)
+        private readonly IAddressService _addressService;
+        public AddressesController(IAddressService addressService)
         {
-            _customerService = customerService;
+            _addressService = addressService;
         }
 
         [HttpGet]
-        public ActionResult<List<CustomerModel>> GetAll()
+        public ActionResult<List<AddressModel>> GetAll()
         {
-            var result = _customerService.GetAllCustomersWithAdresses();
+            var result = _addressService.GetAllAddresses();
+
             if (result == null)
             {
                 return NoContent();
@@ -30,14 +30,14 @@ namespace CustomersApi.Controllers
         }
 
         [HttpGet("{id}/{name}")]
-        public ActionResult<CustomerModel> Get(string id, string name)
+        public ActionResult<AddressModel> Get(string id, string name)
         {
-            if (string.IsNullOrEmpty(id)|| string.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(name))
             {
                 return BadRequest();
             }
 
-            var customer = _customerService.GetCustomer(id, name);
+            var customer = _addressService.GetCustomerAddresses(id, name);
 
             if (customer == null)
             {
@@ -48,7 +48,7 @@ namespace CustomersApi.Controllers
         }
 
         [HttpPost]
-        public ActionResult<CustomerModel> Add([FromBody] CustomerModel model)
+        public ActionResult<AddressModel> Add([FromBody] AddressModel model)
         {
             if (model == null)
             {
@@ -57,7 +57,7 @@ namespace CustomersApi.Controllers
 
             try
             {
-                var result = _customerService.AddCustomer(model);
+                var result = _addressService.AddAddress(model);
 
                 return Ok(new JsonResult(result));
             }
@@ -69,9 +69,9 @@ namespace CustomersApi.Controllers
         }
 
         [HttpPut]
-        public IActionResult Update([FromBody] CustomerModel model)
+        public IActionResult Update([FromBody] AddressModel model)
         {
-            var isSuccess = _customerService.UpdateCustomer(model);
+            var isSuccess = _addressService.UpdateAddress(model);
 
             if (isSuccess)
             {
@@ -82,9 +82,9 @@ namespace CustomersApi.Controllers
         }
 
         [HttpDelete]
-        public IActionResult Delete([FromBody] CustomerModel model)
+        public IActionResult Delete([FromBody] AddressModel model)
         {
-            var isSuccess = _customerService.DeleteCustomer(model);
+            var isSuccess = _addressService.Delete(model);
 
             if (isSuccess)
             {

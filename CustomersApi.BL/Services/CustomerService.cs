@@ -20,13 +20,13 @@ namespace CustomersApi.BL.Services
             _mapper = mapper;
         }
 
-        public IEnumerable<CustomerModel> GetAllCustomers()
+        public IEnumerable<CustomerModel> GetAllCustomersWithAdresses()
         {
             var customers = _repository
                 .GetAll()
-                .Include(x => x.Addresses).ToList();
-
-            var type = customers.FirstOrDefault().Addresses.FirstOrDefault().AddressTypeMapping;
+                .Include(x => x.Addresses)
+                .ThenInclude(x => x.AddressTypeMapping)
+                .ToList();
 
             return _mapper.Map<List<Customer>, List<CustomerModel>>(customers);
         }
@@ -47,24 +47,50 @@ namespace CustomersApi.BL.Services
         public CustomerModel AddCustomer(CustomerModel customer)
         {
             var customerEntity = _mapper.Map<CustomerModel, Customer>(customer);
-
             var newCustomer = _repository.Add(customerEntity);
 
             return _mapper.Map<CustomerModel>(newCustomer);
         }
 
-        public void UpdateCustomer(CustomerModel customer)
+        public bool UpdateCustomer(CustomerModel customer)
         {
-            var customerEntity = _mapper.Map<CustomerModel, Customer>(customer);
+            bool isSuccess;
 
-            _repository.Update(customerEntity);
+            try
+            {
+                var customerEntity = _mapper.Map<CustomerModel, Customer>(customer);            
+
+                _repository.Update(customerEntity);
+
+                isSuccess = true;
+            }
+            catch (Exception e)
+            {
+                isSuccess = false;
+            }
+
+            return isSuccess;
         }
 
-        public void DeleteCustomer(CustomerModel customer)
+        public bool DeleteCustomer(CustomerModel customer)
         {
-            var customerEntity = _mapper.Map<CustomerModel, Customer>(customer);
+            bool isSuccess;
 
-            _repository.Delete(customerEntity);
+            try
+            {
+                var customerEntity = _mapper.Map<CustomerModel, Customer>(customer);
+
+                _repository.Delete(customerEntity);
+
+                isSuccess = true;
+            }
+            catch (Exception e)
+            {
+
+                isSuccess = false;
+            }
+
+            return isSuccess;
         }
     }
 }

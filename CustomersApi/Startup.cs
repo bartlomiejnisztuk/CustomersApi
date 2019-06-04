@@ -1,21 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 using CustomersApi.BL.Services;
 using CustomersApi.DAL;
-using CustomersApi.DAL.Entities;
 using CustomersApi.DAL.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using AutoMapper;
 
 namespace CustomersApi
@@ -37,7 +30,9 @@ namespace CustomersApi
             var connectionString = Configuration["ConnectionString:CustomersDatabase"];
             services.AddDbContext<CustomersContext>(o => o.UseSqlServer(connectionString));
             services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<IAddressService, AddressService>();
             services.AddScoped<CustomersRepository, CustomersRepository>();
+            services.AddScoped<AddressRepository, AddressRepository>();
             //services.AddScoped<BaseRepository<Address>, BaseRepository<Address>>();
             //TODO remove while entities are not returned by controllers
             services.AddMvc().AddJsonOptions(

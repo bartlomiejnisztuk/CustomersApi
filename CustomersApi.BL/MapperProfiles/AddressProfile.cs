@@ -12,11 +12,8 @@ namespace CustomersApi.BL.MapperProfiles
                 .ForMember(m => m.AddressType, opt => opt.MapFrom(src=>src.AddressTypeMapping.AddressName));
 
             CreateMap<AddressModel, Address>()
-                .ForMember(m => m.CustomerId, opt => opt.Ignore())
-                .ForMember(m => m.CustomerName, opt => opt.Ignore())
-                .ForMember(m => m.Customer, opt => opt.Ignore())
-                .ForMember(m => m.AddressTypeMapping, opt => opt.Ignore())
-                .ForMember(m => m.CustomerId, opt => opt.Ignore());
+                .ForMember(m => m.AddressType, opt => opt.Ignore());
+
         }
     }
 }
