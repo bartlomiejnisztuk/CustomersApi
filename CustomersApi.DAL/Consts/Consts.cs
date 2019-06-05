@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CustomersApi.DAL.Consts
+﻿namespace CustomersApi.DAL.Consts
 {
     public static class Consts
     {

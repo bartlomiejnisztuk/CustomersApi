@@ -33,12 +33,6 @@ namespace CustomersApi
             services.AddScoped<IAddressService, AddressService>();
             services.AddScoped<CustomersRepository, CustomersRepository>();
             services.AddScoped<AddressRepository, AddressRepository>();
-            //services.AddScoped<BaseRepository<Address>, BaseRepository<Address>>();
-            //TODO remove while entities are not returned by controllers
-            services.AddMvc().AddJsonOptions(
-                j => j.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            );
-
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
