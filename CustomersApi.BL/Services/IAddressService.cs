@@ -9,8 +9,7 @@ namespace CustomersApi.BL.Services
         IEnumerable<AddressModel> GetAllAddresses();
         AddressModel AddAddress(AddressModel address);
         bool Update(AddressModel address);
-        bool UpdateAddress(AddressModel address);
         bool Delete(AddressModel address);
-        IEnumerable<AddressModel> GetCustomerAddressesOfType(string customerId, string customerName, string type);
+        IEnumerable<AddressModel> GetCustomerAddressesOfName(string customerId, string customerName, string addressName);
     }
 }

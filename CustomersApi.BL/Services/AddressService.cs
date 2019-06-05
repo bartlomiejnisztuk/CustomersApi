@@ -10,8 +10,6 @@ namespace CustomersApi.BL.Services
 {
     public class AddressService : BaseService<Address, AddressModel>, IAddressService
     {
-        //private new readonly AddressRepository _addressRepository;
-        //private new readonly IMapper _mapper;
         private readonly AddressRepository _addressRepository;
         
         public AddressService(AddressRepository repository, IMapper mapper) : base(repository, mapper)
@@ -56,7 +54,7 @@ namespace CustomersApi.BL.Services
             return _addressRepository.GetMappingForAddressName(addressName).AddressType;
         }
 
-        public bool UpdateAddress(AddressModel address)
+        public override bool Update(AddressModel address)
         {
             bool isSuccess;
 
@@ -78,28 +76,29 @@ namespace CustomersApi.BL.Services
             return isSuccess;
         }
 
-        //public bool DeleteAddress(AddressModel address)
-        //{
-        //    bool isSuccess;
+        public override bool Delete(AddressModel address)
+        {
+            bool isSuccess;
 
-        //    try
-        //    {
-        //        var addressEntity = _mapper.Map<AddressModel, Address>(address);
+            try
+            {
+                var addressEntity = _mapper.Map<AddressModel, Address>(address);
+                addressEntity.AddressType = GetAddressTypeCode(address.AddressType);
 
-        //        _repository.Delete(addressEntity);
+                _addressRepository.Delete(addressEntity);
 
-        //        isSuccess = true;
-        //    }
-        //    catch (Exception e)
-        //    {
+                isSuccess = true;
+            }
+            catch (Exception e)
+            {
 
-        //        isSuccess = false;
-        //    }
+                isSuccess = false;
+            }
 
-        //    return isSuccess;
-        //}
+            return isSuccess;
+        }
 
-        public IEnumerable<AddressModel> GetCustomerAddressesOfType(string customerId, string customerName, string addressName)
+        public IEnumerable<AddressModel> GetCustomerAddressesOfName(string customerId, string customerName, string addressName)
         {
             var addresses = _addressRepository
                 .GetAll()

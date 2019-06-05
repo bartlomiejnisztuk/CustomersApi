@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CustomersApi.Controllers
 {
-    //https://dejanstojanovic.net/aspnet/2018/december/choosing-the-proper-return-type-for-webapi-controller-actions/
     [Route("api/[controller]")]
     [ApiController]
     public class CustomersController : ControllerBase
@@ -71,7 +70,7 @@ namespace CustomersApi.Controllers
         [HttpPut]
         public IActionResult Update([FromBody] CustomerModel model)
         {
-            var isSuccess = _customerService.UpdateCustomer(model);
+            var isSuccess = _customerService.Update(model);
 
             if (isSuccess)
             {
@@ -84,7 +83,7 @@ namespace CustomersApi.Controllers
         [HttpDelete]
         public IActionResult Delete([FromBody] CustomerModel model)
         {
-            var isSuccess = _customerService.DeleteCustomer(model);
+            var isSuccess = _customerService.Delete(model);
 
             if (isSuccess)
             {

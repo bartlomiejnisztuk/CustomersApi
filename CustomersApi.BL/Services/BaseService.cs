@@ -14,7 +14,7 @@ namespace CustomersApi.BL.Services
             _repository = repository;
             _mapper = mapper;
         }
-        public bool Update(TModel model)
+        public virtual bool Update(TModel model)
         {
             bool isSuccess;
 
@@ -34,7 +34,7 @@ namespace CustomersApi.BL.Services
             return isSuccess;
         }
 
-        public bool Delete(TModel model)
+        public virtual bool Delete(TModel model)
         {
             bool isSuccess;
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using CustomersApi.BL.Services;
 using CustomersApi.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace CustomersApi.Controllers
 {
@@ -11,6 +12,7 @@ namespace CustomersApi.Controllers
     public class AddressesController : ControllerBase
     {
         private readonly IAddressService _addressService;
+
         public AddressesController(IAddressService addressService)
         {
             _addressService = addressService;
@@ -63,7 +65,6 @@ namespace CustomersApi.Controllers
             }
             catch (Exception e)
             {
-
                 return BadRequest(e.Message);
             }
         }
@@ -71,7 +72,7 @@ namespace CustomersApi.Controllers
         [HttpPut]
         public IActionResult Update([FromBody] AddressModel model)
         {
-            var isSuccess = _addressService.UpdateAddress(model);
+            var isSuccess = _addressService.Update(model);
 
             if (isSuccess)
             {
@@ -92,6 +93,19 @@ namespace CustomersApi.Controllers
             }
 
             return UnprocessableEntity("Unable to delete");
+        }
+
+        [HttpGet("customerAddressOfType/{customerId}/{customerName}/{addressName}")]
+        public IActionResult Get(string customerId, string customerName, string addressName)
+        {
+            var result = _addressService.GetCustomerAddressesOfName(customerId, customerName, addressName);
+
+            if (result == null || !result.Any())
+            {
+                return NoContent();
+            }
+
+            return Ok(result);
         }
     }
 }

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CustomersApi.DAL.Migrations
 {
     [DbContext(typeof(CustomersContext))]
-    [Migration("20190604135258_InitialMigration")]
+    [Migration("20190605100218_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,15 +22,18 @@ namespace CustomersApi.DAL.Migrations
 
             modelBuilder.Entity("CustomersApi.DAL.Entities.Address", b =>
                 {
-                    b.Property<string>("CustomerId");
+                    b.Property<string>("CustomerId")
+                        .HasColumnType("varchar(5)");
 
                     b.Property<string>("AddressType")
-                        .HasConversion(new ValueConverter<string, string>(v => default(string), v => default(string), new ConverterMappingHints(size: 1)));
+                        .HasConversion(new ValueConverter<string, string>(v => default(string), v => default(string), new ConverterMappingHints(size: 1)))
+                        .HasColumnType("varchar(1)");
 
                     b.Property<string>("City")
                         .HasMaxLength(100);
 
                     b.Property<string>("Country")
+                        .HasColumnType("varchar(2)")
                         .HasMaxLength(2);
 
                     b.Property<string>("CustomerName");
@@ -42,6 +45,7 @@ namespace CustomersApi.DAL.Migrations
                         .HasMaxLength(100);
 
                     b.Property<string>("ZIP")
+                        .HasColumnType("varchar(20)")
                         .HasMaxLength(20);
 
                     b.HasKey("CustomerId", "AddressType");
@@ -51,19 +55,44 @@ namespace CustomersApi.DAL.Migrations
                     b.HasIndex("CustomerId", "CustomerName");
 
                     b.ToTable("Addresses");
+
+                    b.HasData(
+                        new
+                        {
+                            CustomerId = "c1",
+                            AddressType = "D",
+                            City = "Dallas",
+                            Country = "US",
+                            CustomerName = "John",
+                            Name = "home",
+                            Street = "2nd Avenue",
+                            ZIP = "234"
+                        },
+                        new
+                        {
+                            CustomerId = "c1",
+                            AddressType = "I",
+                            City = "Dallas",
+                            Country = "US",
+                            CustomerName = "John",
+                            Name = "work",
+                            Street = "2nd Avenue",
+                            ZIP = "234"
+                        });
                 });
 
             modelBuilder.Entity("CustomersApi.DAL.Entities.AddressTypeMapping", b =>
                 {
                     b.Property<string>("AddressType")
                         .ValueGeneratedOnAdd()
-                        .HasConversion(new ValueConverter<string, string>(v => default(string), v => default(string), new ConverterMappingHints(size: 1)));
+                        .HasConversion(new ValueConverter<string, string>(v => default(string), v => default(string), new ConverterMappingHints(size: 1)))
+                        .HasColumnType("varchar(1)");
 
                     b.Property<string>("AddressName");
 
                     b.HasKey("AddressType");
 
-                    b.ToTable("AddressTypeMapping");
+                    b.ToTable("AddressTypeMappings");
 
                     b.HasData(
                         new
@@ -86,6 +115,7 @@ namespace CustomersApi.DAL.Migrations
             modelBuilder.Entity("CustomersApi.DAL.Entities.Customer", b =>
                 {
                     b.Property<string>("CustomerId")
+                        .HasColumnType("varchar(5)")
                         .HasMaxLength(5);
 
                     b.Property<string>("Name")
@@ -95,17 +125,30 @@ namespace CustomersApi.DAL.Migrations
                         .HasMaxLength(100);
 
                     b.Property<string>("Country")
+                        .HasColumnType("varchar(2)")
                         .HasMaxLength(2);
 
                     b.Property<string>("Street")
                         .HasMaxLength(100);
 
                     b.Property<string>("ZIP")
+                        .HasColumnType("varchar(20)")
                         .HasMaxLength(20);
 
                     b.HasKey("CustomerId", "Name");
 
                     b.ToTable("Customers");
+
+                    b.HasData(
+                        new
+                        {
+                            CustomerId = "c1",
+                            Name = "John",
+                            City = "New York",
+                            Country = "US",
+                            Street = "1st Avenue",
+                            ZIP = "123"
+                        });
                 });
 
             modelBuilder.Entity("CustomersApi.DAL.Entities.Address", b =>

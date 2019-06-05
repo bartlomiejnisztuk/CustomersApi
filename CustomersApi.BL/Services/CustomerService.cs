@@ -9,15 +9,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CustomersApi.BL.Services
 {
-    public class CustomerService : ICustomerService
+    public class CustomerService :BaseService<Customer, CustomerModel>, ICustomerService
     {
         private readonly CustomersRepository _repository;
-        private readonly IMapper _mapper;
 
-        public CustomerService(CustomersRepository repository, IMapper mapper)
+        public CustomerService(CustomersRepository repository, IMapper mapper) : base(repository, mapper)
         {
             _repository = repository;
-            _mapper = mapper;
         }
 
         public IEnumerable<CustomerModel> GetAllCustomersWithAdresses()
@@ -50,47 +48,6 @@ namespace CustomersApi.BL.Services
             var newCustomer = _repository.Add(customerEntity);
 
             return _mapper.Map<CustomerModel>(newCustomer);
-        }
-
-        public bool UpdateCustomer(CustomerModel customer)
-        {
-            bool isSuccess;
-
-            try
-            {
-                var customerEntity = _mapper.Map<CustomerModel, Customer>(customer);            
-
-                _repository.Update(customerEntity);
-
-                isSuccess = true;
-            }
-            catch (Exception e)
-            {
-                isSuccess = false;
-            }
-
-            return isSuccess;
-        }
-
-        public bool DeleteCustomer(CustomerModel customer)
-        {
-            bool isSuccess;
-
-            try
-            {
-                var customerEntity = _mapper.Map<CustomerModel, Customer>(customer);
-
-                _repository.Delete(customerEntity);
-
-                isSuccess = true;
-            }
-            catch (Exception e)
-            {
-
-                isSuccess = false;
-            }
-
-            return isSuccess;
-        }
+        }        
     }
 }

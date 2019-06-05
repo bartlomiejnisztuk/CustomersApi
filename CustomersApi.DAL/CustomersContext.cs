@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using CustomersApi.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace CustomersApi.DAL
 {
-    public class CustomersContext: DbContext
+    public class CustomersContext : DbContext
     {
         public CustomersContext(DbContextOptions options) : base(options)
         {
@@ -50,14 +49,14 @@ namespace CustomersApi.DAL
 
             modelBuilder
                 .Entity<Address>()
-                .HasOne<AddressTypeMapping>(e=>e.AddressTypeMapping)
+                .HasOne<AddressTypeMapping>(e => e.AddressTypeMapping)
                 .WithMany()
                 .HasForeignKey(e => new
                 {
                     e.AddressType
                 });
 
-            
+
 
             modelBuilder.Entity<AddressTypeMapping>()
                 .HasData(new List<AddressTypeMapping>
@@ -78,36 +77,56 @@ namespace CustomersApi.DAL
                         AddressName = "service address"
                     },
                 });
+
+            modelBuilder.Entity<Customer>()
+                .HasData(GetSampleCustomer());
+
+            modelBuilder.Entity<Address>()
+                .HasData(GetSampleAddress());
         }
 
-        private char AddressTypeToChar(string addressType)
+        private List<Customer> GetSampleCustomer()
         {
-            switch (addressType)
+            return new List<Customer>
             {
-                case "invoice address":
-                    return 'I';
-                case "delivery address":
-                    return 'D';
-                case "service address":
-                    return 'S';
-                default:
-                    throw new ArgumentException($"Address type: {addressType} is not valid.");
-            }
+                new Customer
+                {
+                    CustomerId = "c1",
+                    Name = "John",
+                    City = "New York",
+                    Country = "US",
+                    Street = "1st Avenue",
+                    ZIP = "123",
+                }
+            };
         }
-
-        private string AddressTypeToString(char addressType)
+        private List<Address> GetSampleAddress()
         {
-            switch (addressType)
+            return new List<Address>
             {
-                case 'I' :
-                    return "invoice address";
-                case 'D':
-                    return "delivery address";
-                case 'S' :
-                    return "service address";
-                default:
-                    throw new ArgumentException($"Address type: {addressType} is not valid.");
-            }
+                new Address
+                {
+                    AddressType = 'D',
+                    City = "Dallas",
+                    Country = "US",
+                    Name = "home",
+                    Street = "2nd Avenue",
+                    ZIP = "234",
+                    CustomerId = "c1",
+                    CustomerName = "John",
+                },
+                new Address
+                {
+                    AddressType = 'I',
+                    City = "Dallas",
+                    Country = "US",
+                    Name = "work",
+                    Street = "2nd Avenue",
+                    ZIP = "234",
+                    CustomerId = "c1",
+                    CustomerName = "John",
+                },
+            };
         }
     }
 }

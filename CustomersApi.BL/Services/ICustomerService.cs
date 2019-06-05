@@ -8,7 +8,7 @@ namespace CustomersApi.BL.Services
         IEnumerable<CustomerModel> GetAllCustomersWithAdresses();
         CustomerModel GetCustomer(string customerId, string customerName);
         CustomerModel AddCustomer(CustomerModel customer);
-        bool UpdateCustomer(CustomerModel customer);
-        bool DeleteCustomer(CustomerModel customer);
+        bool Update(CustomerModel customer);
+        bool Delete(CustomerModel customer);
     }
 }

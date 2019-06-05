@@ -7,27 +7,27 @@ namespace CustomersApi.DAL.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AddressTypeMapping",
+                name: "AddressTypeMappings",
                 columns: table => new
                 {
-                    AddressType = table.Column<string>(nullable: false),
+                    AddressType = table.Column<string>(type: "varchar(1)", nullable: false),
                     AddressName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AddressTypeMapping", x => x.AddressType);
+                    table.PrimaryKey("PK_AddressTypeMappings", x => x.AddressType);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Customers",
                 columns: table => new
                 {
-                    CustomerId = table.Column<string>(maxLength: 5, nullable: false),
+                    CustomerId = table.Column<string>(type: "varchar(5)", maxLength: 5, nullable: false),
                     Name = table.Column<string>(maxLength: 100, nullable: false),
                     Street = table.Column<string>(maxLength: 100, nullable: true),
-                    ZIP = table.Column<string>(maxLength: 20, nullable: true),
+                    ZIP = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: true),
                     City = table.Column<string>(maxLength: 100, nullable: true),
-                    Country = table.Column<string>(maxLength: 2, nullable: true)
+                    Country = table.Column<string>(type: "varchar(2)", maxLength: 2, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -38,22 +38,22 @@ namespace CustomersApi.DAL.Migrations
                 name: "Addresses",
                 columns: table => new
                 {
-                    CustomerId = table.Column<string>(nullable: false),
-                    AddressType = table.Column<string>(nullable: false),
+                    CustomerId = table.Column<string>(type: "varchar(5)", nullable: false),
+                    AddressType = table.Column<string>(type: "varchar(1)", nullable: false),
                     CustomerName = table.Column<string>(nullable: true),
                     Name = table.Column<string>(maxLength: 100, nullable: true),
                     Street = table.Column<string>(maxLength: 100, nullable: true),
-                    ZIP = table.Column<string>(maxLength: 20, nullable: true),
+                    ZIP = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: true),
                     City = table.Column<string>(maxLength: 100, nullable: true),
-                    Country = table.Column<string>(maxLength: 2, nullable: true)
+                    Country = table.Column<string>(type: "varchar(2)", maxLength: 2, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Addresses", x => new { x.CustomerId, x.AddressType });
                     table.ForeignKey(
-                        name: "FK_Addresses_AddressTypeMapping_AddressType",
+                        name: "FK_Addresses_AddressTypeMappings_AddressType",
                         column: x => x.AddressType,
-                        principalTable: "AddressTypeMapping",
+                        principalTable: "AddressTypeMappings",
                         principalColumn: "AddressType",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -65,19 +65,29 @@ namespace CustomersApi.DAL.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "AddressTypeMapping",
+                table: "AddressTypeMappings",
                 columns: new[] { "AddressType", "AddressName" },
-                values: new object[] { "D", "delivery address" });
+                values: new object[,]
+                {
+                    { "D", "delivery address" },
+                    { "I", "invoice address" },
+                    { "S", "service address" }
+                });
 
             migrationBuilder.InsertData(
-                table: "AddressTypeMapping",
-                columns: new[] { "AddressType", "AddressName" },
-                values: new object[] { "I", "invoice address" });
+                table: "Customers",
+                columns: new[] { "CustomerId", "Name", "City", "Country", "Street", "ZIP" },
+                values: new object[] { "c1", "John", "New York", "US", "1st Avenue", "123" });
 
             migrationBuilder.InsertData(
-                table: "AddressTypeMapping",
-                columns: new[] { "AddressType", "AddressName" },
-                values: new object[] { "S", "service address" });
+                table: "Addresses",
+                columns: new[] { "CustomerId", "AddressType", "City", "Country", "CustomerName", "Name", "Street", "ZIP" },
+                values: new object[] { "c1", "D", "Dallas", "US", "John", "home", "2nd Avenue", "234" });
+
+            migrationBuilder.InsertData(
+                table: "Addresses",
+                columns: new[] { "CustomerId", "AddressType", "City", "Country", "CustomerName", "Name", "Street", "ZIP" },
+                values: new object[] { "c1", "I", "Dallas", "US", "John", "work", "2nd Avenue", "234" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Addresses_AddressType",
@@ -96,7 +106,7 @@ namespace CustomersApi.DAL.Migrations
                 name: "Addresses");
 
             migrationBuilder.DropTable(
-                name: "AddressTypeMapping");
+                name: "AddressTypeMappings");
 
             migrationBuilder.DropTable(
                 name: "Customers");
